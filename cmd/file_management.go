@@ -9,7 +9,8 @@ import (
 )
 
 func init() {
-	listFiles.Flags().StringP("device", "d", "", "Device ID to target")
+	listFiles.Flags().StringP("device", "d", "", "Device Serial ID")
+	_ = listFiles.MarkFlagRequired("device")
 
 	emuSync.AddCommand(listFiles)
 }
@@ -28,7 +29,7 @@ var listFiles = &cobra.Command{
 		}
 
 		path := args[0]
-		d, err := es.GetDevice(id)
+		d, err := es.GetDeviceWithConfig(id)
 
 		if err != nil {
 			fmt.Println(err)

@@ -9,7 +9,43 @@ import (
 )
 
 func init() {
+	deviceCmd.AddCommand(initDevice)
+
+	emuSync.AddCommand(deviceCmd)
 	emuSync.AddCommand(listDevices)
+}
+
+var deviceCmd = &cobra.Command{
+	Use:   "device",
+	Short: "Device management commands",
+	Long:  "Commands for managing device configurations and settings",
+}
+
+var initDevice = &cobra.Command{
+	Use:   "init <device serial>",
+	Short: "Initialize a device for use with emuSync",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		es := es.EmuSync{}
+		id := args[0]
+		d, err := es.InitDevice(id)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Printf("Device %s [%s] initialized successfully", d.ID, d.Model)
+	},
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		id := args[0]
+		es := es.EmuSync{}
+
+		if es.DoesConfigExist(id) {
+			return fmt.Errorf("config file already exists for device: %s", id)
+		}
+
+		return nil
+	},
 }
 
 var listDevices = &cobra.Command{

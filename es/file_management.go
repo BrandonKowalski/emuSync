@@ -2,14 +2,15 @@ package es
 
 import (
 	"emuSync/models"
-	"github.com/electricbubble/gadb"
 	"path/filepath"
 	"slices"
 	"strings"
 )
 
-func (s EmuSync) ListFiles(device gadb.Device, path string) ([]models.File, error) {
-	dfi, err := device.List(path)
+func (es *EmuSync) ListFiles(device models.Device, path string) ([]models.File, error) {
+	adb := device.ADBDevice
+
+	dfi, err := adb.List(path)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +25,7 @@ func (s EmuSync) ListFiles(device gadb.Device, path string) ([]models.File, erro
 		files = append(files, models.File{
 			Name:         file.Name,
 			Path:         filepath.Join(path, file.Name),
-			IsDir:        file.Mode.IsDir(),
+			IsDirectory:  file.Mode == 16888, // TODO determine if this is correct... the library is not detecting directories properly
 			Size:         file.Size,
 			LastModified: file.LastModified,
 		})

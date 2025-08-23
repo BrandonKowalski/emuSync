@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func (s EmuSync) ListDevices() ([]models.Device, error) {
+func (es *EmuSync) ListDevices() ([]models.Device, error) {
 	dl, err := client.DeviceList()
 	if err != nil {
 		return nil, err
@@ -32,23 +32,44 @@ func (s EmuSync) ListDevices() ([]models.Device, error) {
 	return devices, err
 }
 
-func (s EmuSync) GetDevice(id string) (gadb.Device, error) {
+func (es *EmuSync) GetDeviceWithConfig(id string) (models.Device, error) {
+	d, err := es.GetDevice(id)
+	if err != nil {
+		return models.Device{}, err
+	}
+
+	config, err := es.LoadConfig(id)
+	if err != nil {
+		return models.Device{}, err
+	}
+
+	config.ADBDevice = d.ADBDevice
+
+	return *config, nil
+}
+
+func (es *EmuSync) GetDevice(id string) (models.Device, error) {
 	dl, err := client.DeviceList()
 	if err != nil {
-		return gadb.Device{}, err
+		return models.Device{}, err
 	}
 
 	if len(dl) == 0 {
-		return gadb.Device{}, errors.New("no devices found")
+		return models.Device{}, errors.New("No devices found")
 	}
 
 	for _, d := range dl {
 		if d.Serial() == id {
-			return d, nil
+			parsed, err := parseDevice(d)
+			if err != nil {
+				return models.Device{}, err
+			}
+
+			return parsed, nil
 		}
 	}
 
-	return gadb.Device{}, errors.New("device not found")
+	return models.Device{}, errors.New("device not found")
 }
 
 func parseDevice(device gadb.Device) (models.Device, error) {
@@ -62,7 +83,8 @@ func parseDevice(device gadb.Device) (models.Device, error) {
 	model = strings.TrimSpace(model)
 
 	return models.Device{
-		ID:    device.Serial(),
-		Model: model,
+		ID:        device.Serial(),
+		Model:     model,
+		ADBDevice: &device,
 	}, nil
 }
