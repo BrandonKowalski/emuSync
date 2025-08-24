@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-var dataDir = filepath.Join(models.EmuSyncDataRoot, "config")
+var dataDir = filepath.Join(emuSyncRoot, "config")
 
 func (es *EmuSync) DoesConfigExist(id string) bool {
 	configPath := filepath.Join(dataDir, fmt.Sprintf("%s.json", id))
