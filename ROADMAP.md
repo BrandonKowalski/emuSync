@@ -2,16 +2,17 @@
 
 ## Core Features
 
-- Save Backups
-    - Archive with Timestamp
-    - Archive JSON Manifest
-- Save State Backups
-    - Archive with Timestamp
-    - Archive JSON Manifest
-- Manage Games
+
+- Games
     - Browse
     - Upload
     - Delete
+- Saves
+  - Archive with Timestamp
+  - Archive JSON Manifest
+- Save States
+  - Archive with Timestamp
+  - Archive JSON Manifest
 - Screenshots
     - Gallery
     - Download
