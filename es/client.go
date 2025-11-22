@@ -1,8 +1,9 @@
 package es
 
 import (
-	"github.com/electricbubble/gadb"
 	"log"
+
+	"github.com/electricbubble/gadb"
 )
 
 var client gadb.Client

@@ -4,13 +4,14 @@ import (
 	"emuSync/models"
 	"encoding/json"
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/mholt/archiver/v3"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
+	"github.com/mholt/archiver/v3"
 )
 
 var (

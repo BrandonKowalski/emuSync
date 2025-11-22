@@ -3,9 +3,10 @@ package es
 import (
 	"emuSync/models"
 	"errors"
-	"github.com/electricbubble/gadb"
 	"slices"
 	"strings"
+
+	"github.com/electricbubble/gadb"
 )
 
 func (es *EmuSync) ListDevices() ([]models.Device, error) {

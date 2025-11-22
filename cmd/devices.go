@@ -3,9 +3,10 @@ package cmd
 import (
 	"emuSync/es"
 	"fmt"
+	"os"
+
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func init() {
